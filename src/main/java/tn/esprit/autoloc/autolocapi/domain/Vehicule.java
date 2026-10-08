@@ -42,4 +42,6 @@ public class Vehicule {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private CategorieVehicule categorie;
+    @ManyToOne
+    private Agence agence;
 }

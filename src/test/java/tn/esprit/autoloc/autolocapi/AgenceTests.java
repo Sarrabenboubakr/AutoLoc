@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import tn.esprit.autoloc.autolocapi.domain.*;
 import tn.esprit.autoloc.autolocapi.repository.IAgenceRepository;
@@ -14,8 +15,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import tn.esprit.autoloc.autolocapi.service.IAgenceService;
 import java.math.BigDecimal;
-
+@Repository
 interface AgenceRepositoryMock extends CrudRepository<Agence, Long> {
 }
 
@@ -152,5 +154,22 @@ class AgenceTests {
         }
 
         fail(sb.toString());
+    }
+    @Autowired
+    private IAgenceService agenceService;
+    @Test
+    void createAgence() {
+        Agence agence = new Agence();
+        agence.setNom("Agence Test Create");
+        agence.setVille("Sousse");
+        agence.setAdresse("Rue de la Plage");
+        agence.setTelephone("73000000");
+
+        Agence created = agenceService.create(agence);
+
+        Assertions.assertNotNull(created, "L'agence créée ne doit pas être null");
+        Assertions.assertNotNull(created.getId(), "L'id doit être généré");
+        Assertions.assertEquals("Agence Test Create", created.getNom());
+        Assertions.assertEquals("Sousse", created.getVille());
     }
 }

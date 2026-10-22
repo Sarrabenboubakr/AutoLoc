@@ -14,7 +14,8 @@ public class EquipementServiceImpl extends GenericServiceImpl<Equipement, Long> 
 
     @Override
     public boolean check(Equipement equipement, boolean isNew) {
-        return Utils.isNotEmpty(equipement.getNom());
+        // On vérifie le champ "libelle" qui existe dans ton entité
+        return Utils.isNotEmpty(equipement.getLibelle());
     }
 
     @Override
@@ -29,8 +30,7 @@ public class EquipementServiceImpl extends GenericServiceImpl<Equipement, Long> 
 
     @Override
     protected void setFields(Equipement source, Equipement target) {
-        target.setNom(source.getNom());
-        target.setDescription(source.getDescription());
-        target.setPrix(source.getPrix());
+        // On copie uniquement le champ qui existe
+        target.setLibelle(source.getLibelle());
     }
 }

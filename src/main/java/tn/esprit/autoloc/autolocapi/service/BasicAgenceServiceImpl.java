@@ -3,6 +3,7 @@ package tn.esprit.autoloc.autolocapi.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.autolocapi.Utils;                        // ← corrigé
+import tn.esprit.autoloc.autolocapi.calcul.VehiculeOffre;
 import tn.esprit.autoloc.autolocapi.domain.Agence;
 import tn.esprit.autoloc.autolocapi.exception.ResourceNotFoundException;
 import tn.esprit.autoloc.autolocapi.repository.IAgenceRepository;
@@ -68,5 +69,9 @@ public class BasicAgenceServiceImpl implements IAgenceService {
     @Override
     public boolean hasVehicles(Long id) {
         return false;
+    }
+    @Override
+    public String simuler(Long idAgence, int nbJours, VehiculeOffre offre) {
+        throw new UnsupportedOperationException("Non implémenté dans la version basique");
     }
 }

@@ -3,6 +3,7 @@ package tn.esprit.autoloc.autolocapi.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.*;
+import java.util.Collection;
 
 @Entity
 @Table(name = "vehicule")
@@ -44,4 +45,8 @@ public class Vehicule {
     private CategorieVehicule categorie;
     @ManyToOne
     private Agence agence;
+
+    public Collection<Equipement> getEquipements() {
+        return java.util.List.of();
+    }
 }

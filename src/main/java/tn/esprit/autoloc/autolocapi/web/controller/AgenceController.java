@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.autoloc.autolocapi.calcul.VehiculeOffre;
 import tn.esprit.autoloc.autolocapi.domain.Agence;
+import tn.esprit.autoloc.autolocapi.domain.Employe;
 import tn.esprit.autoloc.autolocapi.service.IAgenceService;
 
 import java.util.List;
@@ -76,5 +77,8 @@ public class AgenceController {
             @RequestParam int nombreJours,
             @RequestParam VehiculeOffre offre) {
         return agenceService.simuler(id, nombreJours, offre);
+    } @PostMapping("/{id}/employes")
+    public Agence ajouterEmployes(@PathVariable Long id, @RequestBody List<Employe> employes) {
+        return agenceService.ajouterEmployes(id, employes);
     }
 }

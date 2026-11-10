@@ -26,6 +26,8 @@ public class Agence {
     private String adresse;
 
     private String telephone;
+    private Integer effectif;
+
 
     @OneToMany(mappedBy = "agence", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JsonIgnore

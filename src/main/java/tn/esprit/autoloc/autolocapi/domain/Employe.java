@@ -22,4 +22,7 @@ public class Employe {
 
     @Enumerated(EnumType.STRING)
     private RoleEmploye role;
+
+    public void setAgence(Agence agence) {
+    }
 }

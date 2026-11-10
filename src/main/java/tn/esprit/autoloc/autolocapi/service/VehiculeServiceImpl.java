@@ -4,7 +4,10 @@ import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.autolocapi.Utils;
 import tn.esprit.autoloc.autolocapi.calcul.IOffreStrategy;
 import tn.esprit.autoloc.autolocapi.calcul.VehiculeOffre;
+import tn.esprit.autoloc.autolocapi.domain.Agence;
 import tn.esprit.autoloc.autolocapi.domain.Vehicule;
+import tn.esprit.autoloc.autolocapi.exception.ResourceNotFoundException;
+import tn.esprit.autoloc.autolocapi.repository.IAgenceRepository;
 import tn.esprit.autoloc.autolocapi.repository.IVehiculeRepository;
 
 import java.util.Map;
@@ -12,11 +15,13 @@ import java.util.Map;
 @Service
 public class VehiculeServiceImpl extends GenericServiceImpl<Vehicule, Long> implements IVehiculeService {
 
+    private final IAgenceRepository agenceRepository;
     private final Map<String, IOffreStrategy> strategies;
 
-    // Le constructeur injecte le repository ET la Map de stratégies
-    public VehiculeServiceImpl(IVehiculeRepository repository, Map<String, IOffreStrategy> strategies) {
+    // Ce constructeur est correct
+    public VehiculeServiceImpl(IVehiculeRepository repository, IAgenceRepository agenceRepository, Map<String, IOffreStrategy> strategies) {
         super(repository);
+        this.agenceRepository = agenceRepository;
         this.strategies = strategies;
     }
 
@@ -50,25 +55,37 @@ public class VehiculeServiceImpl extends GenericServiceImpl<Vehicule, Long> impl
         target.setAgence(source.getAgence());
     }
 
-    // === QUESTION 16 : Pattern Strategy ===
     @Override
     public double calculTarif(Vehicule vehicule, int nbJours, VehiculeOffre offre) {
         double tarifDeBase = vehicule.getPrixParJour().doubleValue();
-
-        // 1. On récupère la stratégie depuis la Map (ex: "WEEKEND")
         IOffreStrategy strategy = strategies.get(offre.name());
-
-        // 2. On applique la réduction
         double tarifReduit = strategy.calculer(tarifDeBase);
-
-        // 3. On calcule le total
         double total = tarifReduit * nbJours;
 
-        // 4. Réduction de 5% pour longue durée si > 2000
         if (offre == VehiculeOffre.LONGUE_DUREE && total > 2000) {
             total *= 0.95;
         }
-
         return total;
+    }
+
+    @Override
+    public Vehicule desaffecter(Long id) {
+        Vehicule vehicule = findById(id);
+        vehicule.setAgence(null);
+        return repository.save(vehicule);
+    }
+
+    @Override
+    public Vehicule affecterAgence(Long idVehicule, Long idAgence) {
+        Vehicule v = findById(idVehicule);
+        Agence a = agenceRepository.findById(idAgence)
+                .orElseThrow(() -> new ResourceNotFoundException("Agence", idAgence.toString()));
+        v.setAgence(a);
+        return repository.save(v);
+    }
+
+    @Override
+    public Vehicule affecterEquipement(Long idVehicule, Long idEquipement) {
+        return null;
     }
 }

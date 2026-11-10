@@ -6,4 +6,7 @@ import tn.esprit.autoloc.autolocapi.domain.Vehicule;
 public interface IVehiculeService extends IGenericService<Vehicule, Long> {
     double calculTarif(Vehicule vehicule, int nombreJours, VehiculeOffre offre);
 
+    Vehicule desaffecter(Long id);
+    Vehicule affecterAgence(Long idVehicule, Long idAgence);
+    Vehicule affecterEquipement(Long idVehicule, Long idEquipement);
 }

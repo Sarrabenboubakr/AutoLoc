@@ -2,7 +2,7 @@ package tn.esprit.autoloc.autolocapi.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import tn.esprit.autoloc.autolocapi.Utils;                        // ← corrigé
+import tn.esprit.autoloc.autolocapi.Utils;
 import tn.esprit.autoloc.autolocapi.calcul.VehiculeOffre;
 import tn.esprit.autoloc.autolocapi.domain.Agence;
 import tn.esprit.autoloc.autolocapi.domain.Employe;
@@ -29,7 +29,7 @@ public class BasicAgenceServiceImpl implements IAgenceService {
             throw new IllegalArgumentException("Identifiant non null !!!!!!");
         }
         if (!check(agence, true)) {
-            throw new IllegalArgumentException("Certains champs sont invalides |");
+            throw new IllegalArgumentException("Certains champs sont invalides !");
         }
         return repository.save(agence);
     }
@@ -38,7 +38,6 @@ public class BasicAgenceServiceImpl implements IAgenceService {
     public Agence findById(Long id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Agence", id.toString()));
     }
-
 
     @Override
     public List<Agence> findAll() {
@@ -66,18 +65,20 @@ public class BasicAgenceServiceImpl implements IAgenceService {
         repository.deleteById(id);
     }
 
-
+    // === CORRECTION S1186 ===
     @Override
     public boolean hasVehicles(Long id) {
-        return false;
+        throw new UnsupportedOperationException("La méthode hasVehicles n'est pas implémentée dans la version basique");
     }
+
     @Override
     public String simuler(Long idAgence, int nbJours, VehiculeOffre offre) {
         throw new UnsupportedOperationException("Non implémenté dans la version basique");
     }
 
+    // === CORRECTION S1186 ===
     @Override
     public Agence ajouterEmployes(Long idAgence, List<Employe> employes) {
-        return null;
+        throw new UnsupportedOperationException("La méthode ajouterEmployes n'est pas implémentée dans la version basique");
     }
 }

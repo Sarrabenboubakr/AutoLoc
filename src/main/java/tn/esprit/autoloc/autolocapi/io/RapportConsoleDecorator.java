@@ -1,13 +1,18 @@
 package tn.esprit.autoloc.autolocapi.io;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import tn.esprit.autoloc.autolocapi.domain.Agence;
 
-@Primary // On dit à Spring d'utiliser cette version par défaut
+@Primary
 @Component
 public class RapportConsoleDecorator implements Rapport {
+
+    // 1. On déclare le logger
+    private static final Logger log = LoggerFactory.getLogger(RapportConsoleDecorator.class);
 
     private final Rapport rapport;
 
@@ -17,13 +22,12 @@ public class RapportConsoleDecorator implements Rapport {
 
     @Override
     public String generer(Agence agence, double total) {
-        // 1. Affichage sur la console (ce que demande le prof)
-        System.out.println("=== EN-TÊTE AGENCE ===");
-        System.out.println("ID: " + agence.getId());
-        System.out.println("Nom: " + agence.getNom());
-        System.out.println("Téléphone: " + agence.getTelephone());
+        // 2. On remplace les System.out.println par log.info
+        log.info("=== EN-TÊTE AGENCE ===");
+        log.info("ID: {}", agence.getId());
+        log.info("Nom: {}", agence.getNom());
+        log.info("Téléphone: {}", agence.getTelephone());
 
-        // 2. Retourne le total via le rapport simple
         return rapport.generer(agence, total);
     }
 }

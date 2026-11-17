@@ -3,7 +3,7 @@ package tn.esprit.autoloc.autolocapi.service;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional; // <-- IMPORTANT
+import org.springframework.transaction.annotation.Transactional;
 import tn.esprit.autoloc.autolocapi.Utils;
 import tn.esprit.autoloc.autolocapi.calcul.VehiculeOffre;
 import tn.esprit.autoloc.autolocapi.domain.Agence;
@@ -20,15 +20,14 @@ public class AgenceServiceImpl extends GenericServiceImpl<Agence, Long> implemen
 
     private final IVehiculeService vehiculeService;
     private final RapportFactory rapportFactory;
-    private final IEmployeService employeService; // <-- NOUVEAU
+    private final IEmployeService employeService;
 
-    // Ajout de @Lazy pour éviter le cycle de dépendance
     public AgenceServiceImpl(IAgenceRepository repository, IVehiculeService vehiculeService,
                              RapportFactory rapportFactory, @Lazy IEmployeService employeService) {
         super(repository);
         this.vehiculeService = vehiculeService;
         this.rapportFactory = rapportFactory;
-        this.employeService = employeService; // <-- NOUVEAU
+        this.employeService = employeService;
     }
 
     @Override
@@ -55,9 +54,10 @@ public class AgenceServiceImpl extends GenericServiceImpl<Agence, Long> implemen
         target.setTelephone(source.getTelephone());
     }
 
+    // === CORRECTION S1186 ===
     @Override
     public boolean hasVehicles(Long id) {
-        return false;
+        throw new UnsupportedOperationException("La méthode hasVehicles n'est pas encore implémentée");
     }
 
     @Override
@@ -72,20 +72,16 @@ public class AgenceServiceImpl extends GenericServiceImpl<Agence, Long> implemen
         return rapportFactory.getRapport().generer(agence, total);
     }
 
-    // === QUESTION 12 : CODE SÉCURISÉ ===
     @Override
-    @Transactional // <--- C'EST ÇA QUI SÉCURISE TOUT
+    @Transactional
     public Agence ajouterEmployes(Long idAgence, List<Employe> employes) {
-        // 1. Mettre à jour d'abord l'agence
         Agence agence = findById(idAgence);
 
-        // 2. Utiliser le service des employés pour insérer les employés
         for (Employe e : employes) {
-            e.setAgence(agence); // On lie l'employé à l'agence
-            employeService.create(e); // Insertion
+            e.setAgence(agence);
+            employeService.create(e);
         }
 
-        // 3. Mettre à jour le champ effectif
         agence.setEffectif(employes.size());
         return repository.save(agence);
     }

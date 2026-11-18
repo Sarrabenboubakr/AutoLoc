@@ -13,8 +13,8 @@ public class EmployeServiceImpl extends GenericServiceImpl<Employe, Long> implem
     }
 
     @Override
-    public boolean check(Employe Employe, boolean isNew) {
-        return Utils.isNotEmpty(Employe.getNom());
+    public boolean check(Employe employe, boolean isNew) { // <-- 'e' minuscule ici
+        return Utils.isNotEmpty(employe.getNom()); // <-- et ici
     }
 
     @Override
@@ -31,7 +31,6 @@ public class EmployeServiceImpl extends GenericServiceImpl<Employe, Long> implem
     protected void setFields(Employe source, Employe target) {
         target.setNom(source.getNom());
         target.setPrenom(source.getPrenom());
-
         target.setRole(source.getRole());
     }
 }

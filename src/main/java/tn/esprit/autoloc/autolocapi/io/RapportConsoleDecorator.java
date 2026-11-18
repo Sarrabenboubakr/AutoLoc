@@ -11,7 +11,6 @@ import tn.esprit.autoloc.autolocapi.domain.Agence;
 @Component
 public class RapportConsoleDecorator implements Rapport {
 
-    // 1. On déclare le logger
     private static final Logger log = LoggerFactory.getLogger(RapportConsoleDecorator.class);
 
     private final Rapport rapport;
@@ -22,7 +21,6 @@ public class RapportConsoleDecorator implements Rapport {
 
     @Override
     public String generer(Agence agence, double total) {
-        // 2. On remplace les System.out.println par log.info
         log.info("=== EN-TÊTE AGENCE ===");
         log.info("ID: {}", agence.getId());
         log.info("Nom: {}", agence.getNom());

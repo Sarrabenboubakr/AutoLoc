@@ -2,7 +2,7 @@ package tn.esprit.autoloc.autolocapi.calcul;
 
 import org.springframework.stereotype.Component;
 
-@Component("WEEKEND")
+@Component("weekend") // <-- minuscule
 public class OffreWeekend implements IOffreStrategy {
     @Override
     public double calculer(double tarifJournalier) {

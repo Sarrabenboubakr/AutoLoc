@@ -1,5 +1,6 @@
 package tn.esprit.autoloc.autolocapi.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -23,6 +24,9 @@ public class Employe {
     @Enumerated(EnumType.STRING)
     private RoleEmploye role;
 
-    public void setAgence(Agence agence) {
-    }
+    // === RELATION AVEC AGENCE ===
+    @ManyToOne
+    @JoinColumn(name = "agence_id")
+    @JsonIgnore // Pour éviter les boucles infinies en JSON
+    private Agence agence;
 }

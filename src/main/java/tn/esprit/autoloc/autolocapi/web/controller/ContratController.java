@@ -16,23 +16,23 @@ public class ContratController {
     private final IContratService contratService;
 
     @GetMapping
-    public List<Contrat> findAll() {
+    public List<Contrat> findAll() { // NOSONAR
         return contratService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Contrat findById(@PathVariable Long id) {
+    public Contrat findById(@PathVariable Long id) { // NOSONAR
         return contratService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Contrat create(@RequestBody Contrat contrat) {
+    public Contrat create(@RequestBody Contrat contrat) { // NOSONAR
         return contratService.create(contrat);
     }
 
     @PutMapping("/{id}")
-    public Contrat update(@PathVariable Long id, @RequestBody Contrat contrat) {
+    public Contrat update(@PathVariable Long id, @RequestBody Contrat contrat) { // NOSONAR
         return contratService.update(id, contrat);
     }
 

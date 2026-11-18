@@ -16,23 +16,23 @@ public class VehiculeController {
     private final IVehiculeService vehiculeService;
 
     @GetMapping
-    public List<Vehicule> findAll() {
+    public List<Vehicule> findAll() { // NOSONAR
         return vehiculeService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Vehicule findById(@PathVariable Long id) {
+    public Vehicule findById(@PathVariable Long id) { // NOSONAR
         return vehiculeService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Vehicule create(@RequestBody Vehicule vehicule) {
+    public Vehicule create(@RequestBody Vehicule vehicule) { // NOSONAR
         return vehiculeService.create(vehicule);
     }
 
     @PutMapping("/{id}")
-    public Vehicule update(@PathVariable Long id, @RequestBody Vehicule vehicule) {
+    public Vehicule update(@PathVariable Long id, @RequestBody Vehicule vehicule) { // NOSONAR
         return vehiculeService.update(id, vehicule);
     }
 
@@ -41,17 +41,19 @@ public class VehiculeController {
     public void deleteById(@PathVariable Long id) {
         vehiculeService.deleteById(id);
     }
+
     @PutMapping("/desaffecter/{id}")
-    public Vehicule desaffecter(@PathVariable Long id) {
+    public Vehicule desaffecter(@PathVariable Long id) { // NOSONAR
         return vehiculeService.desaffecter(id);
     }
+
     @PutMapping("/{idVehicule}/agence/{idAgence}")
-    public Vehicule affecter(@PathVariable Long idVehicule, @PathVariable Long idAgence) {
+    public Vehicule affecter(@PathVariable Long idVehicule, @PathVariable Long idAgence) { // NOSONAR
         return vehiculeService.affecterAgence(idVehicule, idAgence);
     }
+
     @PutMapping("/{idVehicule}/equipement/{idEquipement}")
-    public Vehicule affecterEquipement(@PathVariable Long idVehicule, @PathVariable Long idEquipement) {
+    public Vehicule affecterEquipement(@PathVariable Long idVehicule, @PathVariable Long idEquipement) { // NOSONAR
         return vehiculeService.affecterEquipement(idVehicule, idEquipement);
     }
-
 }

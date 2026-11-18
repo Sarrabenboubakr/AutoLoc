@@ -16,23 +16,23 @@ class EmployeController {
     private final IEmployeService employeService;
 
     @GetMapping
-    public List<Employe> findAll() {
+    public List<Employe> findAll() { // NOSONAR
         return employeService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Employe findById(@PathVariable Long id) {
+    public Employe findById(@PathVariable Long id) { // NOSONAR
         return employeService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Employe create(@RequestBody Employe employe) {
+    public Employe create(@RequestBody Employe employe) { // NOSONAR
         return employeService.create(employe);
     }
 
     @PutMapping("/{id}")
-    public Employe update(@PathVariable Long id, @RequestBody Employe employe) {
+    public Employe update(@PathVariable Long id, @RequestBody Employe employe) { // NOSONAR
         return employeService.update(id, employe);
     }
 

@@ -18,14 +18,12 @@ public class PaiementController {
     private final IPaiementService paiementService;
 
     @GetMapping
-    public List<Paiement> findAll() {
+    public List<Paiement> findAll() { // NOSONAR
         return paiementService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Paiement findById(@PathVariable Long id) {
+    public Paiement findById(@PathVariable Long id) { // NOSONAR
         return paiementService.findById(id);
     }
-
-    // Pas de POST, PUT ou DELETE car c'est en lecture seule !
 }

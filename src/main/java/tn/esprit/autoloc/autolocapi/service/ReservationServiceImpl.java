@@ -1,6 +1,5 @@
 package tn.esprit.autoloc.autolocapi.service;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 import tn.esprit.autoloc.autolocapi.domain.Reservation;
 import tn.esprit.autoloc.autolocapi.repository.IReservationRepository;
@@ -9,7 +8,7 @@ import tn.esprit.autoloc.autolocapi.repository.IReservationRepository;
 public class ReservationServiceImpl extends GenericServiceImpl<Reservation, Long> implements IReservationService {
 
     public ReservationServiceImpl(IReservationRepository repository) {
-        super((JpaRepository<Reservation, Long>) repository);
+        super(repository); // <-- Cast supprimé ici
     }
 
     @Override

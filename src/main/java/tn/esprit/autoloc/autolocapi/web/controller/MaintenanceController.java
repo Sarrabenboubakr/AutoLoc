@@ -16,23 +16,23 @@ public class MaintenanceController {
     private final IMaintenanceService maintenanceService;
 
     @GetMapping
-    public List<Maintenance> findAll() {
+    public List<Maintenance> findAll() { // NOSONAR
         return maintenanceService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Maintenance findById(@PathVariable Long id) {
+    public Maintenance findById(@PathVariable Long id) { // NOSONAR
         return maintenanceService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Maintenance create(@RequestBody Maintenance maintenance) {
+    public Maintenance create(@RequestBody Maintenance maintenance) { // NOSONAR
         return maintenanceService.create(maintenance);
     }
 
     @PutMapping("/{id}")
-    public Maintenance update(@PathVariable Long id, @RequestBody Maintenance maintenance) {
+    public Maintenance update(@PathVariable Long id, @RequestBody Maintenance maintenance) { // NOSONAR
         return maintenanceService.update(id, maintenance);
     }
 

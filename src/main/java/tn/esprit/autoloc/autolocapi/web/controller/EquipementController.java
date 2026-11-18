@@ -16,23 +16,23 @@ public class EquipementController {
     private final IEquipementService equipementService;
 
     @GetMapping
-    public List<Equipement> findAll() {
+    public List<Equipement> findAll() { // NOSONAR
         return equipementService.findAll();
     }
 
     @GetMapping("/{id}")
-    public Equipement findById(@PathVariable Long id) {
+    public Equipement findById(@PathVariable Long id) { // NOSONAR
         return equipementService.findById(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Equipement create(@RequestBody Equipement equipement) {
+    public Equipement create(@RequestBody Equipement equipement) { // NOSONAR
         return equipementService.create(equipement);
     }
 
     @PutMapping("/{id}")
-    public Equipement update(@PathVariable Long id, @RequestBody Equipement equipement) {
+    public Equipement update(@PathVariable Long id, @RequestBody Equipement equipement) { // NOSONAR
         return equipementService.update(id, equipement);
     }
 

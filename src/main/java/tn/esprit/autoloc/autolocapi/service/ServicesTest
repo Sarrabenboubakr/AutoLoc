@@ -1,0 +1,141 @@
+package tn.esprit.autoloc.autolocapi.service;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import tn.esprit.autoloc.autolocapi.calcul.IOffreStrategy;
+import tn.esprit.autoloc.autolocapi.domain.Agence;
+import tn.esprit.autoloc.autolocapi.domain.Client;
+import tn.esprit.autoloc.autolocapi.domain.Paiement;
+import tn.esprit.autoloc.autolocapi.domain.Vehicule;
+import tn.esprit.autoloc.autolocapi.exception.ResourceNotFoundException;
+import tn.esprit.autoloc.autolocapi.io.RapportFactory;
+import tn.esprit.autoloc.autolocapi.repository.*;
+
+import java.util.Map;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class ServicesTest {
+
+    // ==========================================
+    // MOCKS (Faux objets pour simuler la base de données)
+    // ==========================================
+    @Mock private IAgenceRepository agenceRepository;
+    @Mock private IVehiculeRepository vehiculeRepository;
+    @Mock private IClientRepository clientRepository;
+    @Mock private IPaiementRepository paiementRepository;
+    @Mock private IVehiculeService vehiculeService;
+    @Mock private IEmployeService employeService;
+    @Mock private RapportFactory rapportFactory;
+    @Mock private Map<String, IOffreStrategy> strategies;
+
+    // ==========================================
+    // CLASSES À TESTER (Injection des mocks)
+    // ==========================================
+    @InjectMocks private AgenceServiceImpl agenceService;
+    @InjectMocks private VehiculeServiceImpl vehiculeServiceTest;
+    @InjectMocks private ClientServiceImpl clientService;
+    @InjectMocks private PaiementServiceImpl paiementService;
+
+
+    // ==========================================
+    // 1. TESTS POUR AGENCE
+    // ==========================================
+    @Test
+    void testCreateAgence() {
+        Agence agence = new Agence();
+        agence.setNom("Agence Test");
+        agence.setTelephone("71000000");
+
+        when(agenceRepository.save(any(Agence.class))).thenReturn(agence);
+
+        Agence created = agenceService.create(agence);
+
+        assertNotNull(created);
+        assertEquals("Agence Test", created.getNom());
+        verify(agenceRepository, times(1)).save(agence);
+    }
+
+    @Test
+    void testFindByIdAgenceInexistant() {
+        when(agenceRepository.findById(99L)).thenReturn(Optional.empty());
+        assertThrows(ResourceNotFoundException.class, () -> agenceService.findById(99L));
+    }
+
+
+    // ==========================================
+    // 2. TESTS POUR VEHICULE
+    // ==========================================
+    @Test
+    void testCreateVehicule() {
+        Vehicule v = new Vehicule();
+        v.setImmatriculation("123TUN456");
+        v.setMarque("Renault");
+
+        when(vehiculeRepository.save(any(Vehicule.class))).thenReturn(v);
+
+        Vehicule created = vehiculeServiceTest.create(v);
+
+        assertNotNull(created);
+        assertEquals("123TUN456", created.getImmatriculation());
+    }
+
+    @Test
+    void testAffecterAgence() {
+        Vehicule v = new Vehicule();
+        v.setId(1L);
+        Agence a = new Agence();
+        a.setId(2L);
+
+        when(vehiculeRepository.findById(1L)).thenReturn(Optional.of(v));
+        when(agenceRepository.findById(2L)).thenReturn(Optional.of(a));
+        when(vehiculeRepository.save(any(Vehicule.class))).thenReturn(v);
+
+        Vehicule result = vehiculeServiceTest.affecterAgence(1L, 2L);
+
+        assertNotNull(result);
+        assertEquals(a, result.getAgence());
+    }
+
+
+    // ==========================================
+    // 3. TESTS POUR CLIENT
+    // ==========================================
+    @Test
+    void testCreateClient() {
+        Client client = new Client();
+        client.setNom("Sarra");
+
+        when(clientRepository.save(any(Client.class))).thenReturn(client);
+
+        Client created = clientService.create(client);
+
+        assertNotNull(created);
+        assertEquals("Sarra", created.getNom());
+    }
+
+
+    // ==========================================
+    // 4. TESTS POUR PAIEMENT (Lecture seule)
+    // ==========================================
+    @Test
+    void testFindByIdPaiement() {
+        Paiement p = new Paiement();
+        p.setId(1L);
+        p.setMontant(new java.math.BigDecimal("150.00"));
+
+        when(paiementRepository.findById(1L)).thenReturn(Optional.of(p));
+
+        Paiement found = paiementService.findById(1L);
+
+        assertNotNull(found);
+        assertEquals(1L, found.getId());
+    }
+}

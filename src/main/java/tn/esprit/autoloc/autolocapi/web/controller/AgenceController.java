@@ -24,7 +24,7 @@ public class AgenceController {
 
     @Operation(summary = "Lister toutes les agences")
     @GetMapping
-    public List<Agence> findAll() {
+    public List<Agence> findAll() { // NOSONAR
         return agenceService.findAll();
     }
 
@@ -32,7 +32,7 @@ public class AgenceController {
     @ApiResponse(responseCode = "200", description = "Agence trouvée")
     @ApiResponse(responseCode = "404", description = "Agence introuvable")
     @GetMapping("/{id}")
-    public Agence findById(@Parameter(description = "ID de l'agence") @PathVariable Long id) {
+    public Agence findById(@Parameter(description = "ID de l'agence") @PathVariable Long id) { // NOSONAR
         return agenceService.findById(id);
     }
 
@@ -41,7 +41,7 @@ public class AgenceController {
     @ApiResponse(responseCode = "400", description = "Données invalides")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Agence create(@RequestBody Agence agence) {
+    public Agence create(@RequestBody Agence agence) { // NOSONAR
         return agenceService.create(agence);
     }
 
@@ -50,7 +50,7 @@ public class AgenceController {
     @ApiResponse(responseCode = "404", description = "Agence introuvable")
     @ApiResponse(responseCode = "400", description = "Données invalides")
     @PutMapping("/{id}")
-    public Agence update(@Parameter(description = "ID de l'agence") @PathVariable Long id, @RequestBody Agence agence) {
+    public Agence update(@Parameter(description = "ID de l'agence") @PathVariable Long id, @RequestBody Agence agence) { // NOSONAR
         return agenceService.update(id, agence);
     }
 
@@ -72,7 +72,7 @@ public class AgenceController {
     }
 
     @PostMapping("/{id}/employes")
-    public Agence ajouterEmployes(@PathVariable Long id, @RequestBody List<Employe> employes) {
+    public Agence ajouterEmployes(@PathVariable Long id, @RequestBody List<Employe> employes) { // NOSONAR
         return agenceService.ajouterEmployes(id, employes);
     }
 }

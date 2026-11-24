@@ -1,5 +1,6 @@
 package tn.esprit.autoloc.autolocapi.web.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -32,14 +33,14 @@ public class VehiculeController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public VehiculeDTO create(@RequestBody VehiculeDTO vehiculeDTO) { // <-- DTO en entrée et sortie
+    public VehiculeDTO create(@Valid @RequestBody VehiculeDTO vehiculeDTO) { // <-- DTO en entrée et sortie
         Vehicule vehicule = vehiculeMapper.fromDTO(vehiculeDTO);
         Vehicule created = vehiculeService.create(vehicule);
         return vehiculeMapper.toDTO(created);
     }
 
     @PutMapping("/{id}")
-    public VehiculeDTO update(@PathVariable Long id, @RequestBody VehiculeDTO vehiculeDTO) { // <-- DTO
+    public VehiculeDTO update(@PathVariable Long id,@Valid @RequestBody VehiculeDTO vehiculeDTO) { // <-- DTO
         Vehicule vehicule = vehiculeMapper.fromDTO(vehiculeDTO);
         Vehicule updated = vehiculeService.update(id, vehicule);
         return vehiculeMapper.toDTO(updated);

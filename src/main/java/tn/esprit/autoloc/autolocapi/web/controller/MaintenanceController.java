@@ -1,5 +1,6 @@
 package tn.esprit.autoloc.autolocapi.web.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -32,14 +33,14 @@ public class MaintenanceController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public MaintenanceDTO create(@RequestBody MaintenanceDTO maintenanceDTO) {
+    public MaintenanceDTO create(@Valid@RequestBody MaintenanceDTO maintenanceDTO) {
         Maintenance maintenance = maintenanceMapper.fromDTO(maintenanceDTO);
         Maintenance created = maintenanceService.create(maintenance);
         return maintenanceMapper.toDTO(created);
     }
 
     @PutMapping("/{id}")
-    public MaintenanceDTO update(@PathVariable Long id, @RequestBody MaintenanceDTO maintenanceDTO) {
+    public MaintenanceDTO update(@PathVariable Long id,@Valid @RequestBody MaintenanceDTO maintenanceDTO) {
         Maintenance maintenance = maintenanceMapper.fromDTO(maintenanceDTO);
         Maintenance updated = maintenanceService.update(id, maintenance);
         return maintenanceMapper.toDTO(updated);

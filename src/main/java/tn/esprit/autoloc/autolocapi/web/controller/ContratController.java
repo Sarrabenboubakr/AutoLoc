@@ -1,5 +1,6 @@
 package tn.esprit.autoloc.autolocapi.web.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -32,14 +33,14 @@ public class ContratController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ContratDTO create(@RequestBody ContratDTO contratDTO) {
+    public ContratDTO create( @Valid @RequestBody ContratDTO contratDTO) {
         Contrat contrat = contratMapper.fromDTO(contratDTO);
         Contrat created = contratService.create(contrat);
         return contratMapper.toDTO(created);
     }
 
     @PutMapping("/{id}")
-    public ContratDTO update(@PathVariable Long id, @RequestBody ContratDTO contratDTO) {
+    public ContratDTO update(@PathVariable Long id, @Valid @RequestBody ContratDTO contratDTO) {
         Contrat contrat = contratMapper.fromDTO(contratDTO);
         Contrat updated = contratService.update(id, contrat);
         return contratMapper.toDTO(updated);

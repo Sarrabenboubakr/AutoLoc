@@ -1,5 +1,6 @@
 package tn.esprit.autoloc.autolocapi.web.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -32,14 +33,14 @@ class EmployeController { // <-- J'ai mis public
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public EmployeDTO create(@RequestBody EmployeDTO employeDTO) {
+    public EmployeDTO create( @Valid @RequestBody EmployeDTO employeDTO) {
         Employe employe = employeMapper.fromDTO(employeDTO);
         Employe created = employeService.create(employe);
         return employeMapper.toDTO(created);
     }
 
     @PutMapping("/{id}")
-    public EmployeDTO update(@PathVariable Long id, @RequestBody EmployeDTO employeDTO) {
+    public EmployeDTO update(@PathVariable Long id,@Valid @RequestBody EmployeDTO employeDTO) {
         Employe employe = employeMapper.fromDTO(employeDTO);
         Employe updated = employeService.update(id, employe);
         return employeMapper.toDTO(updated);

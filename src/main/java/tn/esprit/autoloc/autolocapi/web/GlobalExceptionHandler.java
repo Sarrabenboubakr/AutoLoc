@@ -2,13 +2,16 @@ package tn.esprit.autoloc.autolocapi.web;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException; // <-- AJOUTÉ
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import jakarta.servlet.http.HttpServletRequest;
 import tn.esprit.autoloc.autolocapi.exception.ResourceNotFoundException;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId; // <-- AJOUTÉ ICI
+import java.time.ZoneId;
+import java.util.HashMap; // <-- AJOUTÉ
+import java.util.Map;     // <-- AJOUTÉ
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -19,7 +22,7 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
 
         ErrorResponse error = new ErrorResponse(
-                LocalDateTime.now(ZoneId.of("UTC")), // <-- MODIFIÉ ICI
+                LocalDateTime.now(ZoneId.of("UTC")),
                 HttpStatus.NOT_FOUND.value(),
                 "Not Found",
                 ex.getMessage(),
@@ -35,7 +38,7 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
 
         ErrorResponse error = new ErrorResponse(
-                LocalDateTime.now(ZoneId.of("UTC")), // <-- MODIFIÉ ICI
+                LocalDateTime.now(ZoneId.of("UTC")),
                 HttpStatus.BAD_REQUEST.value(),
                 "Bad Request",
                 ex.getMessage(),
@@ -51,7 +54,7 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
 
         ErrorResponse error = new ErrorResponse(
-                LocalDateTime.now(ZoneId.of("UTC")), // <-- MODIFIÉ ICI
+                LocalDateTime.now(ZoneId.of("UTC")),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Internal Server Error",
                 "Une erreur interne est survenue.",
@@ -59,5 +62,15 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    // === GESTION DES ERREURS DE VALIDATION (@Valid) ===
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error ->
+                errors.put(error.getField(), error.getDefaultMessage())
+        );
+        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 }

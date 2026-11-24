@@ -1,5 +1,6 @@
 package tn.esprit.autoloc.autolocapi.web.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -32,14 +33,14 @@ public class ClientController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ClientDTO create(@RequestBody ClientDTO clientDTO) {
+    public ClientDTO create(@Valid @RequestBody ClientDTO clientDTO) {
         Client client = clientMapper.fromDTO(clientDTO);
         Client created = clientService.create(client);
         return clientMapper.toDTO(created);
     }
 
     @PutMapping("/{id}")
-    public ClientDTO update(@PathVariable Long id, @RequestBody ClientDTO clientDTO) {
+    public ClientDTO update(@PathVariable Long id,@Valid @RequestBody ClientDTO clientDTO) {
         Client client = clientMapper.fromDTO(clientDTO);
         Client updated = clientService.update(id, client);
         return clientMapper.toDTO(updated);

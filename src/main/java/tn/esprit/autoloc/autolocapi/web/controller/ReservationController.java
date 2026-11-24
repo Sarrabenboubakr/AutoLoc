@@ -1,5 +1,6 @@
 package tn.esprit.autoloc.autolocapi.web.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -32,14 +33,14 @@ public class ReservationController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ReservationDTO create(@RequestBody ReservationDTO reservationDTO) {
+    public ReservationDTO create( @Valid @RequestBody ReservationDTO reservationDTO) {
         Reservation reservation = reservationMapper.fromDTO(reservationDTO);
         Reservation created = reservationService.create(reservation);
         return reservationMapper.toDTO(created);
     }
 
     @PutMapping("/{id}")
-    public ReservationDTO update(@PathVariable Long id, @RequestBody ReservationDTO reservationDTO) {
+    public ReservationDTO update(@PathVariable Long id,@Valid @RequestBody ReservationDTO reservationDTO) {
         Reservation reservation = reservationMapper.fromDTO(reservationDTO);
         Reservation updated = reservationService.update(id, reservation);
         return reservationMapper.toDTO(updated);

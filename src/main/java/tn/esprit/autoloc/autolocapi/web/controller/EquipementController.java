@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.autoloc.autolocapi.domain.Equipement;
 import tn.esprit.autoloc.autolocapi.service.IEquipementService;
+import tn.esprit.autoloc.autolocapi.web.dto.EquipementDTO;
+import tn.esprit.autoloc.autolocapi.web.dto.EquipementMapper;
 
 import java.util.List;
 
@@ -14,26 +16,33 @@ import java.util.List;
 public class EquipementController {
 
     private final IEquipementService equipementService;
+    private final EquipementMapper equipementMapper;
 
     @GetMapping
-    public List<Equipement> findAll() { // NOSONAR
-        return equipementService.findAll();
+    public List<EquipementDTO> findAll() {
+        List<Equipement> equipements = equipementService.findAll();
+        return equipementMapper.toDTOList(equipements);
     }
 
     @GetMapping("/{id}")
-    public Equipement findById(@PathVariable Long id) { // NOSONAR
-        return equipementService.findById(id);
+    public EquipementDTO findById(@PathVariable Long id) {
+        Equipement equipement = equipementService.findById(id);
+        return equipementMapper.toDTO(equipement);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Equipement create(@RequestBody Equipement equipement) { // NOSONAR
-        return equipementService.create(equipement);
+    public EquipementDTO create(@RequestBody EquipementDTO equipementDTO) {
+        Equipement equipement = equipementMapper.fromDTO(equipementDTO);
+        Equipement created = equipementService.create(equipement);
+        return equipementMapper.toDTO(created);
     }
 
     @PutMapping("/{id}")
-    public Equipement update(@PathVariable Long id, @RequestBody Equipement equipement) { // NOSONAR
-        return equipementService.update(id, equipement);
+    public EquipementDTO update(@PathVariable Long id, @RequestBody EquipementDTO equipementDTO) {
+        Equipement equipement = equipementMapper.fromDTO(equipementDTO);
+        Equipement updated = equipementService.update(id, equipement);
+        return equipementMapper.toDTO(updated);
     }
 
     @DeleteMapping("/{id}")

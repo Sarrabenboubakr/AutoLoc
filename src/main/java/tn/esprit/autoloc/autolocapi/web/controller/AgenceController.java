@@ -11,6 +11,8 @@ import tn.esprit.autoloc.autolocapi.calcul.VehiculeOffre;
 import tn.esprit.autoloc.autolocapi.domain.Agence;
 import tn.esprit.autoloc.autolocapi.domain.Employe;
 import tn.esprit.autoloc.autolocapi.service.IAgenceService;
+import tn.esprit.autoloc.autolocapi.web.dto.AgenceDTO;
+import tn.esprit.autoloc.autolocapi.web.dto.AgenceMapper;
 
 import java.util.List;
 
@@ -21,19 +23,22 @@ import java.util.List;
 public class AgenceController {
 
     private final IAgenceService agenceService;
+    private final AgenceMapper agenceMapper; // <-- Injection du Mapper
 
     @Operation(summary = "Lister toutes les agences")
     @GetMapping
-    public List<Agence> findAll() { // NOSONAR
-        return agenceService.findAll();
+    public List<AgenceDTO> findAll() { // <-- Liste de DTO
+        List<Agence> agences = agenceService.findAll();
+        return agenceMapper.toDTOList(agences); // <-- Utilisation du Mapper
     }
 
     @Operation(summary = "Consulter une agence par son ID")
     @ApiResponse(responseCode = "200", description = "Agence trouvée")
     @ApiResponse(responseCode = "404", description = "Agence introuvable")
     @GetMapping("/{id}")
-    public Agence findById(@Parameter(description = "ID de l'agence") @PathVariable Long id) { // NOSONAR
-        return agenceService.findById(id);
+    public AgenceDTO findById(@Parameter(description = "ID de l'agence") @PathVariable Long id) { // <-- DTO
+        Agence agence = agenceService.findById(id);
+        return agenceMapper.toDTO(agence); // <-- Utilisation du Mapper
     }
 
     @Operation(summary = "Créer une nouvelle agence")
@@ -41,8 +46,10 @@ public class AgenceController {
     @ApiResponse(responseCode = "400", description = "Données invalides")
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Agence create(@RequestBody Agence agence) { // NOSONAR
-        return agenceService.create(agence);
+    public AgenceDTO create(@RequestBody AgenceDTO agenceDTO) { // <-- DTO en paramètre et en retour
+        Agence agence = agenceMapper.fromDTO(agenceDTO);
+        Agence created = agenceService.create(agence);
+        return agenceMapper.toDTO(created);
     }
 
     @Operation(summary = "Modifier une agence existante")
@@ -50,8 +57,10 @@ public class AgenceController {
     @ApiResponse(responseCode = "404", description = "Agence introuvable")
     @ApiResponse(responseCode = "400", description = "Données invalides")
     @PutMapping("/{id}")
-    public Agence update(@Parameter(description = "ID de l'agence") @PathVariable Long id, @RequestBody Agence agence) { // NOSONAR
-        return agenceService.update(id, agence);
+    public AgenceDTO update(@Parameter(description = "ID de l'agence") @PathVariable Long id, @RequestBody AgenceDTO agenceDTO) {
+        Agence agence = agenceMapper.fromDTO(agenceDTO);
+        Agence updated = agenceService.update(id, agence);
+        return agenceMapper.toDTO(updated);
     }
 
     @Operation(summary = "Supprimer une agence")
@@ -72,7 +81,8 @@ public class AgenceController {
     }
 
     @PostMapping("/{id}/employes")
-    public Agence ajouterEmployes(@PathVariable Long id, @RequestBody List<Employe> employes) { // NOSONAR
-        return agenceService.ajouterEmployes(id, employes);
+    public AgenceDTO ajouterEmployes(@PathVariable Long id, @RequestBody List<Employe> employes) {
+        Agence agence = agenceService.ajouterEmployes(id, employes);
+        return agenceMapper.toDTO(agence);
     }
 }

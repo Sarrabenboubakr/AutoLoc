@@ -5,6 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.autoloc.autolocapi.domain.Vehicule;
 import tn.esprit.autoloc.autolocapi.service.IVehiculeService;
+import tn.esprit.autoloc.autolocapi.web.dto.VehiculeDTO;
+import tn.esprit.autoloc.autolocapi.web.dto.VehiculeMapper;
 
 import java.util.List;
 
@@ -14,26 +16,33 @@ import java.util.List;
 public class VehiculeController {
 
     private final IVehiculeService vehiculeService;
+    private final VehiculeMapper vehiculeMapper; // <-- Injection du Mapper
 
     @GetMapping
-    public List<Vehicule> findAll() { // NOSONAR
-        return vehiculeService.findAll();
+    public List<VehiculeDTO> findAll() { // <-- Liste de DTO
+        List<Vehicule> vehicules = vehiculeService.findAll();
+        return vehiculeMapper.toDTOList(vehicules);
     }
 
     @GetMapping("/{id}")
-    public Vehicule findById(@PathVariable Long id) { // NOSONAR
-        return vehiculeService.findById(id);
+    public VehiculeDTO findById(@PathVariable Long id) { // <-- DTO
+        Vehicule vehicule = vehiculeService.findById(id);
+        return vehiculeMapper.toDTO(vehicule);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Vehicule create(@RequestBody Vehicule vehicule) { // NOSONAR
-        return vehiculeService.create(vehicule);
+    public VehiculeDTO create(@RequestBody VehiculeDTO vehiculeDTO) { // <-- DTO en entrée et sortie
+        Vehicule vehicule = vehiculeMapper.fromDTO(vehiculeDTO);
+        Vehicule created = vehiculeService.create(vehicule);
+        return vehiculeMapper.toDTO(created);
     }
 
     @PutMapping("/{id}")
-    public Vehicule update(@PathVariable Long id, @RequestBody Vehicule vehicule) { // NOSONAR
-        return vehiculeService.update(id, vehicule);
+    public VehiculeDTO update(@PathVariable Long id, @RequestBody VehiculeDTO vehiculeDTO) { // <-- DTO
+        Vehicule vehicule = vehiculeMapper.fromDTO(vehiculeDTO);
+        Vehicule updated = vehiculeService.update(id, vehicule);
+        return vehiculeMapper.toDTO(updated);
     }
 
     @DeleteMapping("/{id}")
@@ -43,17 +52,20 @@ public class VehiculeController {
     }
 
     @PutMapping("/desaffecter/{id}")
-    public Vehicule desaffecter(@PathVariable Long id) { // NOSONAR
-        return vehiculeService.desaffecter(id);
+    public VehiculeDTO desaffecter(@PathVariable Long id) { // <-- DTO
+        Vehicule vehicule = vehiculeService.desaffecter(id);
+        return vehiculeMapper.toDTO(vehicule);
     }
 
     @PutMapping("/{idVehicule}/agence/{idAgence}")
-    public Vehicule affecter(@PathVariable Long idVehicule, @PathVariable Long idAgence) { // NOSONAR
-        return vehiculeService.affecterAgence(idVehicule, idAgence);
+    public VehiculeDTO affecter(@PathVariable Long idVehicule, @PathVariable Long idAgence) { // <-- DTO
+        Vehicule vehicule = vehiculeService.affecterAgence(idVehicule, idAgence);
+        return vehiculeMapper.toDTO(vehicule);
     }
 
     @PutMapping("/{idVehicule}/equipement/{idEquipement}")
-    public Vehicule affecterEquipement(@PathVariable Long idVehicule, @PathVariable Long idEquipement) { // NOSONAR
-        return vehiculeService.affecterEquipement(idVehicule, idEquipement);
+    public VehiculeDTO affecterEquipement(@PathVariable Long idVehicule, @PathVariable Long idEquipement) { // <-- DTO
+        Vehicule vehicule = vehiculeService.affecterEquipement(idVehicule, idEquipement);
+        return vehiculeMapper.toDTO(vehicule);
     }
 }
